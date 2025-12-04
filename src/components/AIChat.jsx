@@ -71,8 +71,9 @@ When users ask questions:
 
 User question: ${textToSend}`
 
-      const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
-      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${API_KEY}`
+      const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyB1DzRPPyA8n9_OCOj2WdUJIXEJ6VIvxlw'
+      // Using gemini-2.0-flash as fallback (has quota available)
+      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`
 
       const response = await axios.post(
         API_URL,
