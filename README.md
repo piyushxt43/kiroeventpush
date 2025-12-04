@@ -438,3 +438,5 @@ If you find AgentOS useful, please consider giving it a star! ⭐
 [Website](https://agentos.dev) • [Twitter](https://twitter.com/AgentOS_AI) • [LinkedIn](https://linkedin.com/company/agentos)
 
 </div>
+#   k i r o e v e n t  
+ 
