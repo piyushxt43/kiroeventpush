@@ -1,13 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Bot, X, Send, Sparkles, BarChart3, TrendingUp, Users } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { Bot, X, Send, Sparkles, BarChart3, TrendingUp, Users, Upload } from 'lucide-react'
 import axios from 'axios'
+import { useData } from '../context/DataContext'
 import './AIChat.css'
 
 const AIChat = ({ isOpen, onToggle, user }) => {
+  const { userData, updateMetrics } = useData()
   const [messages, setMessages] = useState([
     { 
       role: 'assistant', 
-      content: `Hi there! 👋 I'm your AgentOS AI assistant. I can help you:\n\n• Analyze your social media performance\n• Generate custom reports and visualizations\n• Answer questions about your data\n• Automate tasks and workflows\n\nWhat would you like to do today?`,
+      content: userData.hasData 
+        ? `Hi! 👋 I'm your AI assistant. Ask me anything about your analytics, trends, or social media strategy!`
+        : `Hi! 👋 I'm your AI assistant here to help!\n\nTo add your metrics, click the "Update Metrics" button on your dashboard.\n\nOnce you have data, I can help you analyze trends, get insights, and answer questions about your social media performance!`,
       actions: []
     }
   ])
@@ -15,104 +19,108 @@ const AIChat = ({ isOpen, onToggle, user }) => {
   const [loading, setLoading] = useState(false)
   const messagesEndRef = useRef(null)
 
-  const quickActions = [
-    { icon: BarChart3, text: 'Show top posts', prompt: 'Show me my top performing posts this week' },
-    { icon: TrendingUp, text: 'Engagement trends', prompt: 'Analyze my engagement trends over the last month' },
-    { icon: Users, text: 'Audience insights', prompt: 'Give me insights about my audience demographics' },
-    { icon: Sparkles, text: 'Generate report', prompt: 'Create a weekly performance report' }
+  const quickActions = userData.hasData ? [
+    { icon: TrendingUp, text: 'Analyze trends', prompt: 'Analyze my engagement trends and give me insights' },
+    { icon: Users, text: 'Best practices', prompt: 'What are best practices to improve my engagement?' },
+    { icon: BarChart3, text: 'Compare platforms', prompt: 'Compare my platform performance' },
+    { icon: Sparkles, text: 'Content ideas', prompt: 'Suggest content ideas based on my metrics' }
+  ] : [
+    { icon: Sparkles, text: 'Getting started', prompt: 'How do I get started with AgentOS?' },
+    { icon: TrendingUp, text: 'Features', prompt: 'What features does AgentOS offer?' },
+    { icon: Users, text: 'Tips', prompt: 'Give me social media growth tips' },
+    { icon: BarChart3, text: 'Analytics', prompt: 'How can analytics help my business?' }
   ]
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
-
   useEffect(() => {
-    scrollToBottom()
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  const processAIResponse = (text) => {
-    // Detect if AI is suggesting actions
-    const actions = []
-    
-    if (text.toLowerCase().includes('create') || text.toLowerCase().includes('generate')) {
-      actions.push({ label: 'Create Report', action: 'create_report' })
+  const extractMetrics = async (text) => {
+    try {
+      const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
+      if (!API_KEY) throw new Error('API key not configured')
+
+      const prompt = `Extract metrics from: "${text}"\n\nReturn JSON:\n{"platforms":{"instagram":{"followers":0,"engagement_rate":0,"reach":0,"posts":0},"twitter":{...},"tiktok":{...}}}\n\nConvert 52K=52000, 2.1M=2100000. Only JSON, no markdown.`
+
+      const response = await axios.post(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
+        { contents: [{ parts: [{ text: prompt }] }] }
+      )
+
+      if (response.data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+        let jsonText = response.data.candidates[0].content.parts[0].text.trim()
+        jsonText = jsonText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+        return JSON.parse(jsonText)
+      }
+      return null
+    } catch (error) {
+      console.error('Extraction error:', error)
+      return null
     }
-    if (text.toLowerCase().includes('show') || text.toLowerCase().includes('display')) {
-      actions.push({ label: 'View Dashboard', action: 'view_dashboard' })
-    }
-    if (text.toLowerCase().includes('export') || text.toLowerCase().includes('download')) {
-      actions.push({ label: 'Export Data', action: 'export_data' })
-    }
-    
-    return { content: text, actions }
   }
 
   const sendMessage = async (messageText = null) => {
     const textToSend = messageText || input
     if (!textToSend.trim() || loading) return
 
-    const userMessage = { role: 'user', content: textToSend }
-    setMessages(prev => [...prev, userMessage])
+    setMessages(prev => [...prev, { role: 'user', content: textToSend }])
     setInput('')
     setLoading(true)
 
     try {
-      const systemPrompt = `You are AgentOS AI Assistant, a helpful AI for social media analytics. You help users analyze their Instagram, Twitter, and TikTok performance. 
+      const hasNumbers = /\d/.test(textToSend)
+      const hasPlatforms = /(instagram|twitter|tiktok|followers|engagement|reach)/i.test(textToSend)
+      
+      if (hasNumbers && hasPlatforms) {
+        const extracted = await extractMetrics(textToSend)
+        
+        if (extracted?.platforms) {
+          updateMetrics(extracted)
+          
+          const updated = Object.keys(extracted.platforms).filter(
+            p => extracted.platforms[p].followers > 0
+          )
+          
+          setMessages(prev => [...prev, { 
+            role: 'assistant', 
+            content: `✅ Updated ${updated.join(', ')}!\n\n${updated.map(p => {
+              const d = extracted.platforms[p]
+              return `📊 ${p.charAt(0).toUpperCase() + p.slice(1)}:\n• ${d.followers.toLocaleString()} followers\n• ${d.engagement_rate}% engagement\n• ${d.reach.toLocaleString()} reach`
+            }).join('\n\n')}`,
+            actions: [
+              { label: 'View Dashboard', action: 'view_dashboard' },
+              { label: 'Add More', action: 'update_metrics' }
+            ]
+          }])
+          setLoading(false)
+          return
+        }
+      }
 
-Current user: ${user?.displayName || 'User'}
-Context: You have access to their social media analytics dashboard with metrics like followers, engagement rate, reach, and content performance.
-
-When users ask questions:
-- Provide specific, actionable insights
-- Reference actual metrics when possible (use realistic numbers)
-- Suggest concrete actions they can take
-- Be conversational and friendly
-- If they ask you to create something, explain what you would create and offer to do it
-
-User question: ${textToSend}`
+      const systemPrompt = `You are AgentOS AI Assistant.
+User: ${user?.displayName || 'User'}
+Has data: ${userData.hasData}
+${userData.hasData ? `Metrics: Instagram ${userData.platforms.instagram.followers}, Twitter ${userData.platforms.twitter.followers}, TikTok ${userData.platforms.tiktok.followers}` : 'No data yet'}
+Be helpful and conversational.
+Question: ${textToSend}`
 
       const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
+      if (!API_KEY) throw new Error('API key not configured')
       
-      if (!API_KEY) {
-        throw new Error('Gemini API key is not configured. Please add VITE_GEMINI_API_KEY to your .env file.')
-      }
-      
-      // Using gemini-2.0-flash as fallback (has quota available)
-      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`
-
       const response = await axios.post(
-        API_URL,
-        {
-          contents: [{
-            parts: [{ text: systemPrompt }]
-          }]
-        }
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
+        { contents: [{ parts: [{ text: systemPrompt }] }] }
       )
 
-      console.log('API Response:', response.data)
-
-      if (response.data && response.data.candidates && response.data.candidates[0]) {
+      if (response.data?.candidates?.[0]?.content?.parts?.[0]?.text) {
         const aiResponse = response.data.candidates[0].content.parts[0].text
-        const processedResponse = processAIResponse(aiResponse)
-        setMessages(prev => [...prev, { role: 'assistant', ...processedResponse }])
-      } else {
-        throw new Error('Invalid response format from API')
+        setMessages(prev => [...prev, { role: 'assistant', content: aiResponse, actions: [] }])
       }
     } catch (error) {
       console.error('AI Error:', error)
-      console.error('Error details:', error.response?.data || error.message)
-      
-      let errorMessage = 'Sorry, I encountered an error. Please try again.'
-      
-      if (error.response?.data?.error?.message) {
-        errorMessage = `Error: ${error.response.data.error.message}`
-      } else if (error.message) {
-        errorMessage = `Error: ${error.message}`
-      }
-      
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: errorMessage,
+        content: `Error: ${error.message}. Please try again.`,
         actions: []
       }])
     } finally {
@@ -120,38 +128,23 @@ User question: ${textToSend}`
     }
   }
 
-  const handleQuickAction = (prompt) => {
-    setInput(prompt)
-    sendMessage(prompt)
-  }
-
   const handleAction = (action) => {
-    switch(action) {
-      case 'create_report':
-        window.location.href = '/reports'
-        break
-      case 'view_dashboard':
-        window.location.href = '/'
-        break
-      case 'export_data':
-        alert('Export functionality coming soon!')
-        break
-      default:
-        break
-    }
-  }
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      sendMessage()
+    if (action === 'view_dashboard') {
+      window.location.href = '/'
+      onToggle()
+    } else if (action === 'update_metrics') {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: 'Share your updated metrics!',
+        actions: []
+      }])
     }
   }
 
   return (
     <>
       {!isOpen && (
-        <button className="chat-toggle" onClick={onToggle} title="Open AI Assistant">
+        <button className="chat-toggle" onClick={onToggle} title="AI Assistant - Ask me anything!">
           <Bot size={32} />
         </button>
       )}
@@ -160,10 +153,12 @@ User question: ${textToSend}`
         <div className="chat-container">
           <div className="chat-header">
             <div className="chat-header-content">
-              <Bot size={24} className="chat-logo" />
+              <Bot size={24} />
               <div>
-                <h3>AgentOS AI</h3>
-                <span style={{ fontSize: '12px', color: '#8b98a5' }}>Always here to help</span>
+                <h3>AI Assistant</h3>
+                <span style={{ fontSize: '12px', color: '#8b98a5' }}>
+                  Your analytics helper
+                </span>
               </div>
             </div>
             <button onClick={onToggle} className="chat-close">
@@ -176,9 +171,9 @@ User question: ${textToSend}`
               <button 
                 key={idx} 
                 className="quick-action-btn"
-                onClick={() => handleQuickAction(action.prompt)}
+                onClick={() => sendMessage(action.prompt)}
               >
-                <action.icon size={14} style={{ marginRight: '6px', display: 'inline' }} />
+                <action.icon size={14} style={{ marginRight: '6px' }} />
                 {action.text}
               </button>
             ))}
@@ -189,7 +184,7 @@ User question: ${textToSend}`
               <div key={idx} className={`message ${msg.role}`}>
                 <div className="message-content">
                   {msg.content}
-                  {msg.actions && msg.actions.length > 0 && (
+                  {msg.actions?.length > 0 && (
                     <div className="action-buttons">
                       {msg.actions.map((action, i) => (
                         <button 
@@ -208,8 +203,8 @@ User question: ${textToSend}`
             {loading && (
               <div className="message assistant">
                 <div className="message-content typing">
-                  <Sparkles size={16} style={{ display: 'inline', marginRight: '8px' }} />
-                  Analyzing...
+                  <Sparkles size={16} style={{ marginRight: '8px' }} />
+                  Processing...
                 </div>
               </div>
             )}
@@ -220,8 +215,13 @@ User question: ${textToSend}`
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Ask me anything about your analytics..."
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault()
+                  sendMessage()
+                }
+              }}
+              placeholder="Ask me anything about analytics, trends, or strategy..."
               className="chat-input"
               rows="2"
             />

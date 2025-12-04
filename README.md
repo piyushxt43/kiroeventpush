@@ -166,14 +166,26 @@ Click the **"Sign In"** button in the top-right corner to:
 - Connect social media accounts (coming soon)
 - Access personalized insights
 
-### 3️⃣ **Chat with Your Data**
-Click the **blue pulsing bot button** (bottom-right) to:
-- Ask questions: *"Show me my top posts this week"*
-- Get insights: *"What time should I post for maximum engagement?"*
-- Generate reports: *"Create a weekly performance summary"*
-- Navigate: AI suggests relevant pages and actions
+### 3️⃣ **Add Your Metrics**
+Click the **"Update Metrics"** button on the Dashboard to:
+- Enter your Instagram, Twitter, and TikTok data
+- Input followers, engagement rate, reach, and posts
+- Supports formats like: 50K, 2.5M, or 50000
+- Watch your dashboard update in real-time with beautiful graphs
 
-### 4️⃣ **Explore Pages**
+### 4️⃣ **Chat with AI Assistant**
+Click the **bot button** (bottom-right) to:
+- Ask questions: *"What are best practices to improve engagement?"*
+- Get insights: *"Analyze my engagement trends"*
+- Content ideas: *"Suggest content ideas based on my metrics"*
+- Strategy help: AI provides actionable recommendations
+
+### 5️⃣ **Export Your Data**
+- **CSV Export**: Download your metrics as a spreadsheet
+- **PDF Export**: Generate professional reports for presentations
+- One-click export from the Dashboard
+
+### 6️⃣ **Explore Pages**
 Use the sidebar to navigate:
 - **Dashboard**: Overview and key metrics
 - **Platform Analytics**: Deep-dive into each social network
