@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
-import { Users, Heart, Eye, TrendingUp, Instagram, Twitter, Youtube, Bot, Plus, FileDown, FileText } from 'lucide-react'
+import { Users, Heart, Eye, TrendingUp, Instagram, Twitter, Youtube, Plus, FileDown, FileText } from 'lucide-react'
 import { useData } from '../context/DataContext'
 import MetricCard from '../components/MetricCard'
 import DataInput from '../components/DataInput'
@@ -46,7 +46,6 @@ const Dashboard = () => {
       return
     }
 
-    // Simple PDF export using print
     const printWindow = window.open('', '', 'width=800,height=600')
     printWindow.document.write(`
       <html>
@@ -129,7 +128,6 @@ const Dashboard = () => {
     { title: 'Growth Rate', value: '0%', change: 0, icon: TrendingUp, color: '#43e97b' }
   ]
 
-  // Generate engagement data based on user's actual metrics
   const generateEngagementData = () => {
     if (!userData.hasData) {
       return [
@@ -146,8 +144,7 @@ const Dashboard = () => {
     const { instagram, twitter, tiktok } = userData.platforms
     const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     
-    return days.map((date, index) => {
-      // Calculate engagement based on followers and engagement rate
+    return days.map((date) => {
       const instagramEngagement = Math.round((instagram.followers * instagram.engagement_rate / 100) * (0.8 + Math.random() * 0.4))
       const twitterEngagement = Math.round((twitter.followers * twitter.engagement_rate / 100) * (0.8 + Math.random() * 0.4))
       const tiktokEngagement = Math.round((tiktok.followers * tiktok.engagement_rate / 100) * (0.8 + Math.random() * 0.4))
@@ -197,223 +194,223 @@ const Dashboard = () => {
     { platform: 'TikTok', followers: '0', engagement: '0%', icon: Youtube, color: '#000000' }
   ]
 
-  if (!userData.hasData) {
-    return (
-      <div className="dashboard">
-        <div className="page-header">
-          <h1>Dashboard</h1>
-        </div>
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          minHeight: '60vh',
-          textAlign: 'center',
-          padding: '32px'
-        }}>
-          <TrendingUp size={64} style={{ color: '#2563eb', marginBottom: '24px' }} />
-          <h2 style={{ fontSize: '24px', marginBottom: '16px' }}>Welcome to Your Dashboard</h2>
-          <p style={{ color: '#8b98a5', marginBottom: '24px', maxWidth: '500px' }}>
-            Start by entering your social media metrics to see beautiful visualizations and insights.
-          </p>
-          <button 
-            onClick={() => setShowDataInput(true)}
-            style={{
-              background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-              color: 'white',
-              border: 'none',
-              padding: '14px 28px',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              marginBottom: '32px'
-            }}
-          >
-            <Plus size={20} />
-            Enter Your Metrics
-          </button>
-          <div style={{ 
-            background: '#0a0a0a', 
-            border: '1px solid #2a2a2a', 
-            borderRadius: '12px', 
-            padding: '24px',
-            maxWidth: '600px'
-          }}>
-            <h3 style={{ marginBottom: '16px' }}>What You'll Get:</h3>
-            <ul style={{ textAlign: 'left', color: '#8b98a5', lineHeight: '1.8', listStyle: 'none', padding: 0 }}>
-              <li>📊 Real-time analytics dashboard</li>
-              <li>📈 Engagement trend graphs</li>
-              <li>🎯 Platform performance comparison</li>
-              <li>💡 AI-powered insights (chat assistant)</li>
-              <li>📄 Export reports as PDF/CSV</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="dashboard">
       <DataInput isOpen={showDataInput} onClose={() => setShowDataInput(false)} />
       
-      <div className="page-header">
-        <h1>Dashboard</h1>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <button
-              onClick={exportToCSV}
-              style={{
-                background: '#0a0a0a',
-                color: '#e7e9ea',
-                border: '1px solid #2a2a2a',
-                padding: '10px 16px',
-                borderRadius: '8px',
-                fontSize: '14px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
-            >
-              <FileDown size={16} />
-              Export CSV
-            </button>
-            <button
-              onClick={exportToPDF}
-              style={{
-                background: '#0a0a0a',
-                color: '#e7e9ea',
-                border: '1px solid #2a2a2a',
-                padding: '10px 16px',
-                borderRadius: '8px',
-                fontSize: '14px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
-            >
-              <FileText size={16} />
-              Export PDF
-            </button>
-            <button
+      {!userData.hasData ? (
+        <>
+          <div className="page-header">
+            <h1>Dashboard</h1>
+          </div>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            minHeight: '60vh',
+            textAlign: 'center',
+            padding: '32px'
+          }}>
+            <TrendingUp size={64} style={{ color: '#2563eb', marginBottom: '24px' }} />
+            <h2 style={{ fontSize: '24px', marginBottom: '16px' }}>Welcome to Your Dashboard</h2>
+            <p style={{ color: '#8b98a5', marginBottom: '24px', maxWidth: '500px' }}>
+              Start by entering your social media metrics to see beautiful visualizations and insights.
+            </p>
+            <button 
               onClick={() => setShowDataInput(true)}
               style={{
                 background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                 color: 'white',
                 border: 'none',
-                padding: '10px 16px',
+                padding: '14px 28px',
                 borderRadius: '8px',
-                fontSize: '14px',
+                fontSize: '16px',
                 fontWeight: '500',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px'
+                gap: '8px',
+                marginBottom: '32px'
               }}
             >
-              <Plus size={16} />
-              Update Metrics
+              <Plus size={20} />
+              Enter Your Metrics
             </button>
+            <div style={{ 
+              background: '#0a0a0a', 
+              border: '1px solid #2a2a2a', 
+              borderRadius: '12px', 
+              padding: '24px',
+              maxWidth: '600px'
+            }}>
+              <h3 style={{ marginBottom: '16px' }}>What You'll Get:</h3>
+              <ul style={{ textAlign: 'left', color: '#8b98a5', lineHeight: '1.8', listStyle: 'none', padding: 0 }}>
+                <li>📊 Real-time analytics dashboard</li>
+                <li>📈 Engagement trend graphs</li>
+                <li>🎯 Platform performance comparison</li>
+                <li>💡 AI-powered insights (chat assistant)</li>
+                <li>📄 Export reports as PDF/CSV</li>
+              </ul>
+            </div>
           </div>
-          <div className="time-range-selector">
-            {['24h', '7d', '30d', '90d'].map(range => (
-              <button
-                key={range}
-                className={`range-btn ${timeRange === range ? 'active' : ''}`}
-                onClick={() => setTimeRange(range)}
-              >
-                {range}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="metrics-grid">
-        {metrics.map((metric, idx) => (
-          <MetricCard key={idx} {...metric} />
-        ))}
-      </div>
-
-      <div className="dashboard-grid">
-        <div className="chart-card">
-          <h2>Engagement Trends</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={engagementData}>
-              <defs>
-                <linearGradient id="instagram" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#E4405F" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#E4405F" stopOpacity={0}/>
-                </linearGradient>
-                <linearGradient id="twitter" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#1DA1F2" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#1DA1F2" stopOpacity={0}/>
-                </linearGradient>
-                <linearGradient id="tiktok" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#00f2ea" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#00f2ea" stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1a1a1a" />
-              <XAxis dataKey="date" stroke="#8b98a5" />
-              <YAxis stroke="#8b98a5" />
-              <Tooltip contentStyle={{ background: '#0a0a0a', border: '1px solid #2a2a2a', borderRadius: '8px' }} />
-              <Legend />
-              <Area type="monotone" dataKey="instagram" stroke="#E4405F" fillOpacity={1} fill="url(#instagram)" />
-              <Area type="monotone" dataKey="twitter" stroke="#1DA1F2" fillOpacity={1} fill="url(#twitter)" />
-              <Area type="monotone" dataKey="tiktok" stroke="#00f2ea" fillOpacity={1} fill="url(#tiktok)" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="alerts-card">
-          <h2>Alert Center</h2>
-          <div className="alerts-list">
-            {alerts.map(alert => (
-              <div key={alert.id} className={`alert-item ${alert.type}`}>
-                <div className="alert-content">
-                  <p>{alert.message}</p>
-                  <span className="alert-time">{alert.time}</span>
-                </div>
-                <button className="alert-dismiss">×</button>
+        </>
+      ) : (
+        <>
+          <div className="page-header">
+            <h1>Dashboard</h1>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  onClick={exportToCSV}
+                  style={{
+                    background: '#0a0a0a',
+                    color: '#e7e9ea',
+                    border: '1px solid #2a2a2a',
+                    padding: '10px 16px',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <FileDown size={16} />
+                  Export CSV
+                </button>
+                <button
+                  onClick={exportToPDF}
+                  style={{
+                    background: '#0a0a0a',
+                    color: '#e7e9ea',
+                    border: '1px solid #2a2a2a',
+                    padding: '10px 16px',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <FileText size={16} />
+                  Export PDF
+                </button>
+                <button
+                  onClick={() => setShowDataInput(true)}
+                  style={{
+                    background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                    color: 'white',
+                    border: 'none',
+                    padding: '10px 16px',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <Plus size={16} />
+                  Update Metrics
+                </button>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="platform-stats">
-        <h2>Platform Overview</h2>
-        <div className="platform-grid">
-          {platformStats.map((stat, idx) => (
-            <div key={idx} className="platform-card">
-              <div className="platform-header">
-                <stat.icon size={24} style={{ color: stat.color }} />
-                <h3>{stat.platform}</h3>
-              </div>
-              <div className="platform-metrics">
-                <div className="platform-metric">
-                  <span className="metric-label">Followers</span>
-                  <span className="metric-value">{stat.followers}</span>
-                </div>
-                <div className="platform-metric">
-                  <span className="metric-label">Engagement</span>
-                  <span className="metric-value">{stat.engagement}</span>
-                </div>
+              <div className="time-range-selector">
+                {['24h', '7d', '30d', '90d'].map(range => (
+                  <button
+                    key={range}
+                    className={`range-btn ${timeRange === range ? 'active' : ''}`}
+                    onClick={() => setTimeRange(range)}
+                  >
+                    {range}
+                  </button>
+                ))}
               </div>
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+
+          <div className="metrics-grid">
+            {metrics.map((metric, idx) => (
+              <MetricCard key={idx} {...metric} />
+            ))}
+          </div>
+
+          <div className="dashboard-grid">
+            <div className="chart-card">
+              <h2>Engagement Trends</h2>
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={engagementData}>
+                  <defs>
+                    <linearGradient id="instagram" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#E4405F" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#E4405F" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="twitter" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#1DA1F2" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#1DA1F2" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="tiktok" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#00f2ea" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#00f2ea" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1a1a1a" />
+                  <XAxis dataKey="date" stroke="#8b98a5" />
+                  <YAxis stroke="#8b98a5" />
+                  <Tooltip contentStyle={{ background: '#0a0a0a', border: '1px solid #2a2a2a', borderRadius: '8px' }} />
+                  <Legend />
+                  <Area type="monotone" dataKey="instagram" stroke="#E4405F" fillOpacity={1} fill="url(#instagram)" />
+                  <Area type="monotone" dataKey="twitter" stroke="#1DA1F2" fillOpacity={1} fill="url(#twitter)" />
+                  <Area type="monotone" dataKey="tiktok" stroke="#00f2ea" fillOpacity={1} fill="url(#tiktok)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="alerts-card">
+              <h2>Alert Center</h2>
+              <div className="alerts-list">
+                {alerts.map(alert => (
+                  <div key={alert.id} className={`alert-item ${alert.type}`}>
+                    <div className="alert-content">
+                      <p>{alert.message}</p>
+                      <span className="alert-time">{alert.time}</span>
+                    </div>
+                    <button className="alert-dismiss">×</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="platform-stats">
+            <h2>Platform Overview</h2>
+            <div className="platform-grid">
+              {platformStats.map((stat, idx) => (
+                <div key={idx} className="platform-card">
+                  <div className="platform-header">
+                    <stat.icon size={24} style={{ color: stat.color }} />
+                    <h3>{stat.platform}</h3>
+                  </div>
+                  <div className="platform-metrics">
+                    <div className="platform-metric">
+                      <span className="metric-label">Followers</span>
+                      <span className="metric-value">{stat.followers}</span>
+                    </div>
+                    <div className="platform-metric">
+                      <span className="metric-label">Engagement</span>
+                      <span className="metric-value">{stat.engagement}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
