@@ -1,0 +1,13 @@
+{
+  "name": "Component Template",
+  "description": "Generate component template when creating new component file",
+  "trigger": {
+    "type": "onCreate",
+    "filePattern": "**/components/*.jsx"
+  },
+  "action": {
+    "type": "message",
+    "message": "Remember to:\n1. Create corresponding CSS file\n2. Add PropTypes or TypeScript types\n3. Export component as default\n4. Add component to index.js if needed"
+  },
+  "enabled": true
+}

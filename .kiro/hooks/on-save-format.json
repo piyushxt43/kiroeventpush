@@ -1,0 +1,13 @@
+{
+  "name": "Format on Save",
+  "description": "Automatically format code when saving files",
+  "trigger": {
+    "type": "onSave",
+    "filePattern": "**/*.{js,jsx,css,json}"
+  },
+  "action": {
+    "type": "command",
+    "command": "prettier --write ${file}"
+  },
+  "enabled": true
+}
