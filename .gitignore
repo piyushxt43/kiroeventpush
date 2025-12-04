@@ -7,10 +7,10 @@ yarn.lock
 dist/
 build/
 
-# Environment variables
-.env
+# Environment variables (keep .env for local development)
 .env.local
 .env.production
+.env.development
 .env.development
 .env.development
 
