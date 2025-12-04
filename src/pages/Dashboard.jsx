@@ -1,17 +1,30 @@
-import React, { useState, useEffect } from 'react'
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
-import { Users, Heart, Eye, TrendingUp, Instagram, Twitter, Youtube } from 'lucide-react'
+import { useState } from 'react'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import { Users, Heart, Eye, TrendingUp, Instagram, Twitter, Youtube, Bot } from 'lucide-react'
+import { useData } from '../context/DataContext'
 import MetricCard from '../components/MetricCard'
 import './Dashboard.css'
 
 const Dashboard = () => {
+  const { userData, getTotalFollowers, getAverageEngagement, getTotalReach, getGrowthRate } = useData()
   const [timeRange, setTimeRange] = useState('7d')
   
-  const metrics = [
-    { title: 'Total Followers', value: '124.5K', change: 12.5, icon: Users, color: '#2563eb' },
-    { title: 'Engagement Rate', value: '4.8%', change: 8.3, icon: Heart, color: '#f093fb' },
-    { title: 'Total Reach', value: '2.1M', change: -3.2, icon: Eye, color: '#60a5fa' },
-    { title: 'Growth Rate', value: '15.2%', change: 5.7, icon: TrendingUp, color: '#43e97b' }
+  const formatNumber = (num) => {
+    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`
+    return num.toString()
+  }
+
+  const metrics = userData.hasData ? [
+    { title: 'Total Followers', value: formatNumber(getTotalFollowers()), change: parseFloat(getGrowthRate()), icon: Users, color: '#2563eb' },
+    { title: 'Engagement Rate', value: `${getAverageEngagement()}%`, change: 8.3, icon: Heart, color: '#f093fb' },
+    { title: 'Total Reach', value: formatNumber(getTotalReach()), change: -3.2, icon: Eye, color: '#60a5fa' },
+    { title: 'Growth Rate', value: `${getGrowthRate()}%`, change: 5.7, icon: TrendingUp, color: '#43e97b' }
+  ] : [
+    { title: 'Total Followers', value: '0', change: 0, icon: Users, color: '#2563eb' },
+    { title: 'Engagement Rate', value: '0%', change: 0, icon: Heart, color: '#f093fb' },
+    { title: 'Total Reach', value: '0', change: 0, icon: Eye, color: '#60a5fa' },
+    { title: 'Growth Rate', value: '0%', change: 0, icon: TrendingUp, color: '#43e97b' }
   ]
 
   const engagementData = [
@@ -30,11 +43,73 @@ const Dashboard = () => {
     { id: 3, type: 'info', message: 'Peak engagement time detected: 7-9 PM', time: '1 day ago' }
   ]
 
-  const platformStats = [
-    { platform: 'Instagram', followers: '52.3K', engagement: '5.2%', icon: Instagram, color: '#E4405F' },
-    { platform: 'Twitter', followers: '38.1K', engagement: '3.8%', icon: Twitter, color: '#1DA1F2' },
-    { platform: 'TikTok', followers: '34.1K', engagement: '6.1%', icon: Youtube, color: '#000000' }
+  const platformStats = userData.hasData ? [
+    { 
+      platform: 'Instagram', 
+      followers: formatNumber(userData.platforms.instagram.followers), 
+      engagement: `${userData.platforms.instagram.engagement_rate}%`, 
+      icon: Instagram, 
+      color: '#E4405F' 
+    },
+    { 
+      platform: 'Twitter', 
+      followers: formatNumber(userData.platforms.twitter.followers), 
+      engagement: `${userData.platforms.twitter.engagement_rate}%`, 
+      icon: Twitter, 
+      color: '#1DA1F2' 
+    },
+    { 
+      platform: 'TikTok', 
+      followers: formatNumber(userData.platforms.tiktok.followers), 
+      engagement: `${userData.platforms.tiktok.engagement_rate}%`, 
+      icon: Youtube, 
+      color: '#000000' 
+    }
+  ] : [
+    { platform: 'Instagram', followers: '0', engagement: '0%', icon: Instagram, color: '#E4405F' },
+    { platform: 'Twitter', followers: '0', engagement: '0%', icon: Twitter, color: '#1DA1F2' },
+    { platform: 'TikTok', followers: '0', engagement: '0%', icon: Youtube, color: '#000000' }
   ]
+
+  if (!userData.hasData) {
+    return (
+      <div className="dashboard">
+        <div className="page-header">
+          <h1>Dashboard</h1>
+        </div>
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          minHeight: '60vh',
+          textAlign: 'center',
+          padding: '32px'
+        }}>
+          <Bot size={64} style={{ color: '#2563eb', marginBottom: '24px' }} />
+          <h2 style={{ fontSize: '24px', marginBottom: '16px' }}>No Data Yet</h2>
+          <p style={{ color: '#8b98a5', marginBottom: '24px', maxWidth: '500px' }}>
+            Get started by sharing your social media metrics with our AI assistant. 
+            Click the chat button in the bottom right corner to begin!
+          </p>
+          <div style={{ 
+            background: '#0a0a0a', 
+            border: '1px solid #2a2a2a', 
+            borderRadius: '12px', 
+            padding: '24px',
+            maxWidth: '600px'
+          }}>
+            <h3 style={{ marginBottom: '16px' }}>Quick Start:</h3>
+            <ol style={{ textAlign: 'left', color: '#8b98a5', lineHeight: '1.8' }}>
+              <li>Click the AI chat button (bottom-right)</li>
+              <li>Share your metrics like: "My Instagram has 50K followers, 5% engagement"</li>
+              <li>Watch your dashboard come to life!</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="dashboard">
