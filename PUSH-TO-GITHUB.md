@@ -1,5 +1,38 @@
 # 📤 How to Push AgentOS to GitHub
 
+## 🔒 SECURITY FIRST!
+
+### ⚠️ Before You Push - Critical Security Check
+
+**STOP! Read this before pushing to GitHub:**
+
+1. **Verify `.env` is NOT being committed:**
+   ```bash
+   git status
+   # You should NOT see .env in the list
+   ```
+
+2. **Check for hardcoded API keys:**
+   ```bash
+   # Search for any exposed keys
+   git grep -i "AIzaSy"
+   # This should return NO results in tracked files
+   ```
+
+3. **Verify `.gitignore` is working:**
+   ```bash
+   cat .gitignore | grep ".env"
+   # Should show .env is ignored
+   ```
+
+4. **Your `.env` file should contain your actual keys** (but never be committed):
+   - ✅ `.env` - Contains real keys, git-ignored
+   - ✅ `.env.example` - Contains placeholders, will be committed
+
+If you see `.env` in `git status`, **DO NOT COMMIT!** It means your `.gitignore` isn't working.
+
+---
+
 ## Step-by-Step Guide
 
 ### 1. Create GitHub Repository
@@ -29,13 +62,19 @@ git branch
 git branch -M main
 ```
 
-### 3. Add All Files
+### 3. Security Check & Add Files
 
 ```bash
-# Add all files to staging
+# IMPORTANT: Verify no sensitive files will be committed
+git status
+
+# Check for API keys one more time
+git diff --cached | grep -i "AIzaSy"
+
+# If all clear, add files
 git add -A
 
-# Verify what will be committed
+# Verify what will be committed (should NOT include .env)
 git status
 ```
 

@@ -193,8 +193,8 @@ src/
 ## 📝 Notes
 
 - All mock data currently (ready for API integration)
-- Firebase project: ria-new
-- Gemini API key included (replace in production)
+- Firebase project configured via environment variables
+- Gemini API key configured via .env file (secure)
 - Responsive design for mobile
 - Cross-browser compatible
 

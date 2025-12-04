@@ -131,11 +131,17 @@ cd kiroeventpush
 # Install dependencies
 npm install
 
+# Set up environment variables (IMPORTANT!)
+cp .env.example .env
+# Edit .env and add your actual API keys
+
 # Start development server
 npm run dev
 ```
 
 Visit **http://localhost:3000** and start exploring! 🎉
+
+> ⚠️ **Security Note**: Never commit your `.env` file! Add your API keys to `.env` for local development. See [SECURITY.md](SECURITY.md) for details.
 
 ### Build for Production
 
@@ -438,5 +444,6 @@ If you find AgentOS useful, please consider giving it a star! ⭐
 [Website](https://agentos.dev) • [Twitter](https://twitter.com/AgentOS_AI) • [LinkedIn](https://linkedin.com/company/agentos)
 
 </div>
-#   k i r o e v e n t  
+#   k i r o e v e n t 
+ 
  

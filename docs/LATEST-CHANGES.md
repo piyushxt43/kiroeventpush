@@ -128,7 +128,7 @@
 - Check console for CORS messages
 
 **API Key Error**:
-- Verify key is correct: `AIzaSyAHmMKu-ZCwfZ8K6PNCBUKVHJ75K9pmzNk`
+- Verify your Gemini API key is correctly set in `.env` file
 - Check if key has quota remaining
 - Verify key is enabled for Gemini API
 

@@ -9,14 +9,14 @@ Go to your Vercel project → Settings → Environment Variables
 Add these **EXACT** variables (copy-paste each one):
 
 ```
-VITE_FIREBASE_API_KEY=AIzaSyAPivtbnPyUM0CZWJ2QGIr_9JnNM_-87G8
-VITE_FIREBASE_AUTH_DOMAIN=ria-new.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=ria-new
-VITE_FIREBASE_STORAGE_BUCKET=ria-new.firebasestorage.app
-VITE_FIREBASE_MESSAGING_SENDER_ID=64303120014
-VITE_FIREBASE_APP_ID=1:64303120014:web:7a724156580dbe5c1f13df
-VITE_FIREBASE_MEASUREMENT_ID=G-1SHJ6T2VST
-VITE_GEMINI_API_KEY=AIzaSyB1DzRPPyA8n9_OCOj2WdUJIXEJ6VIvxlw
+VITE_FIREBASE_API_KEY=your_firebase_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 **Important**: 
@@ -108,14 +108,14 @@ After deployment, verify:
 Copy this entire block and paste into Vercel's environment variables (one per line):
 
 ```env
-VITE_FIREBASE_API_KEY=AIzaSyAPivtbnPyUM0CZWJ2QGIr_9JnNM_-87G8
-VITE_FIREBASE_AUTH_DOMAIN=ria-new.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=ria-new
-VITE_FIREBASE_STORAGE_BUCKET=ria-new.firebasestorage.app
-VITE_FIREBASE_MESSAGING_SENDER_ID=64303120014
-VITE_FIREBASE_APP_ID=1:64303120014:web:7a724156580dbe5c1f13df
-VITE_FIREBASE_MEASUREMENT_ID=G-1SHJ6T2VST
-VITE_GEMINI_API_KEY=AIzaSyB1DzRPPyA8n9_OCOj2WdUJIXEJ6VIvxlw
+VITE_FIREBASE_API_KEY=your_firebase_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 ## 🔒 Security Notes

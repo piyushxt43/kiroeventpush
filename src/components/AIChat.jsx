@@ -71,7 +71,12 @@ When users ask questions:
 
 User question: ${textToSend}`
 
-      const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyB1DzRPPyA8n9_OCOj2WdUJIXEJ6VIvxlw'
+      const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
+      
+      if (!API_KEY) {
+        throw new Error('Gemini API key is not configured. Please add VITE_GEMINI_API_KEY to your .env file.')
+      }
+      
       // Using gemini-2.0-flash as fallback (has quota available)
       const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`
 

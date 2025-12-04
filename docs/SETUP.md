@@ -141,7 +141,7 @@ VITE_TWITTER_BEARER_TOKEN=your_bearer_token
 VITE_TIKTOK_CLIENT_KEY=your_client_key
 
 # AI
-VITE_GEMINI_API_KEY=AIzaSyAHmMKu-ZCwfZ8K6PNCBUKVHJ75K9pmzNk
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
 
 # Project Management
 VITE_ASANA_API_KEY=your_asana_key
