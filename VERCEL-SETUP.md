@@ -1,158 +1,84 @@
-# Vercel Deployment Setup
-
-## Environment Variables for Vercel
-
-Copy and paste these environment variables into your Vercel project settings:
-
-### Firebase Configuration
-
-```
-VITE_FIREBASE_API_KEY=AIzaSyAPivtbnPyUM0CZWJ2QGIr_9JnNM_-87G8
-VITE_FIREBASE_AUTH_DOMAIN=ria-new.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=ria-new
-VITE_FIREBASE_STORAGE_BUCKET=ria-new.firebasestorage.app
-VITE_FIREBASE_MESSAGING_SENDER_ID=64303120014
-VITE_FIREBASE_APP_ID=1:64303120014:web:7a724156580dbe5c1f13df
-VITE_FIREBASE_MEASUREMENT_ID=G-1SHJ6T2VST
-```
-
-### Google Gemini AI
-
-```
-VITE_GEMINI_API_KEY=AIzaSyB1DzRPPyA8n9_OCOj2WdUJIXEJ6VIvxlw
-```
-
-## How to Add to Vercel
-
-### Method 1: Vercel Dashboard (Recommended)
-
-1. Go to your project on Vercel
-2. Click **Settings** → **Environment Variables**
-3. Add each variable:
-   - **Key**: `VITE_FIREBASE_API_KEY`
-   - **Value**: `AIzaSyAPivtbnPyUM0CZWJ2QGIr_9JnNM_-87G8`
-   - Click **Add**
-4. Repeat for all 8 variables above
-5. Redeploy your project
-
-### Method 2: Vercel CLI
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Login
-vercel login
-
-# Add environment variables
-vercel env add VITE_FIREBASE_API_KEY
-# Paste: AIzaSyAPivtbnPyUM0CZWJ2QGIr_9JnNM_-87G8
-
-vercel env add VITE_FIREBASE_AUTH_DOMAIN
-# Paste: ria-new.firebaseapp.com
-
-vercel env add VITE_FIREBASE_PROJECT_ID
-# Paste: ria-new
-
-vercel env add VITE_FIREBASE_STORAGE_BUCKET
-# Paste: ria-new.firebasestorage.app
-
-vercel env add VITE_FIREBASE_MESSAGING_SENDER_ID
-# Paste: 64303120014
-
-vercel env add VITE_FIREBASE_APP_ID
-# Paste: 1:64303120014:web:7a724156580dbe5c1f13df
-
-vercel env add VITE_FIREBASE_MEASUREMENT_ID
-# Paste: G-1SHJ6T2VST
-
-vercel env add VITE_GEMINI_API_KEY
-# Paste: AIzaSyB1DzRPPyA8n9_OCOj2WdUJIXEJ6VIvxlw
-
-# Deploy
-vercel --prod
-```
-
-### Method 3: Import from .env file
-
-1. Create a file named `vercel-env.txt` with this content:
-
-```
-VITE_FIREBASE_API_KEY="AIzaSyAPivtbnPyUM0CZWJ2QGIr_9JnNM_-87G8"
-VITE_FIREBASE_AUTH_DOMAIN="ria-new.firebaseapp.com"
-VITE_FIREBASE_PROJECT_ID="ria-new"
-VITE_FIREBASE_STORAGE_BUCKET="ria-new.firebasestorage.app"
-VITE_FIREBASE_MESSAGING_SENDER_ID="64303120014"
-VITE_FIREBASE_APP_ID="1:64303120014:web:7a724156580dbe5c1f13df"
-VITE_FIREBASE_MEASUREMENT_ID="G-1SHJ6T2VST"
-VITE_GEMINI_API_KEY="AIzaSyB1DzRPPyA8n9_OCOj2WdUJIXEJ6VIvxlw"
-```
-
-2. In Vercel Dashboard:
-   - Go to Settings → Environment Variables
-   - Click **Import .env**
-   - Upload `vercel-env.txt`
+# 🚀 Vercel Deployment Guide for AgentOS
 
 ## Quick Deploy to Vercel
 
-### One-Click Deploy
+### Option 1: One-Click Deploy (Easiest)
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/piyushxt43/kiroeventpush)
 
-After clicking:
-1. Connect your GitHub account
-2. Add the environment variables listed above
-3. Click **Deploy**
+### Option 2: Manual Deploy
 
-### Manual Deploy
+## Step-by-Step Instructions
+
+### 1. Install Vercel CLI (Optional)
 
 ```bash
-# Clone repository
-git clone https://github.com/piyushxt43/kiroeventpush.git
-cd kiroeventpush
-
-# Install dependencies
-npm install
-
-# Deploy to Vercel
-vercel
-
-# Follow prompts and add environment variables when asked
+npm i -g vercel
 ```
 
-## Verify Deployment
+### 2. Connect Your Repository
 
-After deployment:
+1. Go to [vercel.com](https://vercel.com)
+2. Click "Add New Project"
+3. Import your GitHub repository: `piyushxt43/kiroeventpush`
+4. Vercel will auto-detect it's a Vite project
 
-1. Visit your Vercel URL
-2. Test Google Sign-In
-3. Test AI Chat (click blue bot button)
-4. Check browser console for errors
+### 3. Configure Environment Variables
 
-## Troubleshooting
+**IMPORTANT**: Add these environment variables in Vercel Dashboard
 
-### Issue: "import.meta.env is undefined"
+Go to: **Project Settings → Environment Variables**
 
-**Solution**: Make sure all environment variables are added in Vercel dashboard and redeploy.
+Copy and paste these **one by one**:
 
-### Issue: Firebase not working
+```env
+VITE_FIREBASE_API_KEY=AIzaSyAPivtbnPyUM0CZWJ2QGIr_9JnNM_-87G8
+```
 
-**Solution**: 
-1. Check all Firebase variables are correct
-2. Add your Vercel domain to Firebase authorized domains:
-   - Go to Firebase Console → Authentication → Settings
-   - Add your Vercel domain (e.g., `your-app.vercel.app`)
+```env
+VITE_FIREBASE_AUTH_DOMAIN=ria-new.firebaseapp.com
+```
 
-### Issue: AI Chat not responding
+```env
+VITE_FIREBASE_PROJECT_ID=ria-new
+```
 
-**Solution**:
-1. Verify `VITE_GEMINI_API_KEY` is set correctly
-2. Check API quota in Google Cloud Console
-3. Check browser console for errors
+```env
+VITE_FIREBASE_STORAGE_BUCKET=ria-new.firebasestorage.app
+```
 
-## Environment Variables Checklist
+```env
+VITE_FIREBASE_MESSAGING_SENDER_ID=64303120014
+```
 
-Before deploying, ensure all these are set:
+```env
+VITE_FIREBASE_APP_ID=1:64303120014:web:7a724156580dbe5c1f13df
+```
+
+```env
+VITE_FIREBASE_MEASUREMENT_ID=G-1SHJ6T2VST
+```
+
+```env
+VITE_GEMINI_API_KEY=AIzaSyB1DzRPPyA8n9_OCOj2WdUJIXEJ6VIvxlw
+```
+
+### 4. Deploy Settings
+
+Vercel will auto-detect these settings:
+
+- **Framework Preset**: Vite
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Install Command**: `npm install`
+
+### 5. Deploy!
+
+Click **"Deploy"** and wait ~2 minutes.
+
+## 📋 Environment Variables Checklist
+
+Make sure you've added all 8 variables:
 
 - [ ] `VITE_FIREBASE_API_KEY`
 - [ ] `VITE_FIREBASE_AUTH_DOMAIN`
@@ -163,25 +89,136 @@ Before deploying, ensure all these are set:
 - [ ] `VITE_FIREBASE_MEASUREMENT_ID`
 - [ ] `VITE_GEMINI_API_KEY`
 
-## Post-Deployment
+## 🔧 Post-Deployment Configuration
 
-After successful deployment:
+### Update Firebase Authorized Domains
 
-1. **Update Firebase**:
-   - Add Vercel domain to authorized domains
-   - Update OAuth redirect URIs
+1. Go to [Firebase Console](https://console.firebase.google.com)
+2. Select your project: **ria-new**
+3. Go to **Authentication → Settings → Authorized domains**
+4. Add your Vercel domain: `your-project.vercel.app`
 
-2. **Test Features**:
-   - Google Sign-In
-   - AI Chat
-   - All pages load correctly
-   - No console errors
+Example: `agentos-analytics.vercel.app`
 
-3. **Monitor**:
-   - Check Vercel Analytics
-   - Monitor Firebase usage
-   - Check Gemini API quota
+### Test Your Deployment
+
+1. Visit your Vercel URL
+2. Click "Sign In" button
+3. Try Google Sign-In
+4. Test AI Chat assistant
+5. Navigate through all pages
+
+## 🚨 Troubleshooting
+
+### Issue: Build Fails
+
+**Solution**: Check build logs in Vercel dashboard
+- Ensure all dependencies are in `package.json`
+- Verify Node version (18+)
+
+### Issue: Environment Variables Not Working
+
+**Solution**: 
+1. Verify all variables start with `VITE_`
+2. Redeploy after adding variables
+3. Check variable names match exactly
+
+### Issue: Firebase Auth Not Working
+
+**Solution**:
+1. Add Vercel domain to Firebase authorized domains
+2. Check Firebase API key is correct
+3. Verify OAuth consent screen is configured
+
+### Issue: AI Chat Not Responding
+
+**Solution**:
+1. Check Gemini API key is correct
+2. Verify API quota in Google Cloud Console
+3. Check browser console for errors
+
+## 📊 Vercel CLI Deployment
+
+If you prefer CLI:
+
+```bash
+# Login to Vercel
+vercel login
+
+# Deploy to production
+vercel --prod
+
+# Set environment variables via CLI
+vercel env add VITE_FIREBASE_API_KEY
+# Enter value when prompted
+# Repeat for all variables
+```
+
+## 🔄 Automatic Deployments
+
+Vercel automatically deploys when you push to GitHub:
+
+- **Push to `main`** → Production deployment
+- **Push to other branches** → Preview deployment
+
+## 🎨 Custom Domain (Optional)
+
+1. Go to Project Settings → Domains
+2. Add your custom domain
+3. Update DNS records as instructed
+4. Add domain to Firebase authorized domains
+
+## 📈 Performance Optimization
+
+Vercel automatically provides:
+- ✅ Global CDN
+- ✅ Automatic HTTPS
+- ✅ Gzip compression
+- ✅ Image optimization
+- ✅ Edge caching
+
+## 🔐 Security Headers
+
+Vercel automatically adds:
+- X-Frame-Options
+- X-Content-Type-Options
+- X-XSS-Protection
+
+## 📊 Analytics
+
+Enable Vercel Analytics:
+1. Go to Project Settings → Analytics
+2. Enable Web Analytics
+3. View real-time metrics
+
+## 💰 Pricing
+
+- **Hobby Plan**: Free
+  - Unlimited deployments
+  - 100GB bandwidth/month
+  - Perfect for this project
+
+- **Pro Plan**: $20/month
+  - More bandwidth
+  - Team features
+  - Priority support
+
+## 🎉 Success!
+
+Your AgentOS is now live on Vercel! 🚀
+
+**Share your deployment**:
+- Tweet about it
+- Add to your portfolio
+- Share with friends
+
+## 📞 Support
+
+Need help?
+- [Vercel Documentation](https://vercel.com/docs)
+- [Vercel Discord](https://vercel.com/discord)
+- [GitHub Issues](https://github.com/piyushxt43/kiroeventpush/issues)
 
 ---
 
-**Your AgentOS is ready to deploy!** 🚀
+**Pro Tip**: Bookmark your Vercel dashboard for easy access to logs and analytics!
